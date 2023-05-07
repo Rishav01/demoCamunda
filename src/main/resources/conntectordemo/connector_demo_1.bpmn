@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0tz3dcv" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+  <bpmn:process id="Process_0xlgl5g" isExecutable="true">
+    <bpmn:endEvent id="Event_05vgsal">
+      <bpmn:incoming>Flow_0mu6crh</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_1kuma6w" name="Rest API GET Call">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="method">GET</camunda:inputParameter>
+            <camunda:inputParameter name="url">https://reqres.in/api/users?page=2</camunda:inputParameter>
+            <camunda:outputParameter name="response">${response}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">execution.setVariable("retryCount", execution.getVariable("retryCount") + 1);</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02gk3hn</bpmn:incoming>
+      <bpmn:outgoing>Flow_1bkzi5h</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="Event_08twoy1">
+      <bpmn:incoming>Flow_18jvhte</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mu6crh</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_12f7pce">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="Activity_1oojv9f" name="Rest API POST Call">
+      <bpmn:extensionElements>
+        <camunda:connector>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="body">"{
+    "name": "morpheus",
+    "job": "leader"
+}"</camunda:inputParameter>
+            <camunda:inputParameter name="method">POST</camunda:inputParameter>
+            <camunda:inputParameter name="url">https://reqres.in/api/users</camunda:inputParameter>
+            <camunda:outputParameter name="UserCreatedResponse">${response}</camunda:outputParameter>
+          </camunda:inputOutput>
+          <camunda:connectorId>http-connector</camunda:connectorId>
+        </camunda:connector>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">execution.setVariable("userCreated", true);</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1bkzi5h</bpmn:incoming>
+      <bpmn:outgoing>Flow_18jvhte</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0mu6crh" sourceRef="Event_08twoy1" targetRef="Event_05vgsal" />
+    <bpmn:sequenceFlow id="Flow_1bkzi5h" sourceRef="Activity_1kuma6w" targetRef="Activity_1oojv9f" />
+    <bpmn:sequenceFlow id="Flow_18jvhte" sourceRef="Activity_1oojv9f" targetRef="Event_08twoy1" />
+    <bpmn:startEvent id="Event_03cmrdm" camunda:asyncBefore="true" camunda:asyncAfter="true">
+      <bpmn:extensionElements>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="groovy">execution.setVariable("retryCount", 0);</camunda:script>
+        </camunda:executionListener>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_02gk3hn</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_02gk3hn" sourceRef="Event_03cmrdm" targetRef="Activity_1kuma6w" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0xlgl5g">
+      <bpmndi:BPMNEdge id="Flow_0mu6crh_di" bpmnElement="Flow_0mu6crh">
+        <di:waypoint x="608" y="117" />
+        <di:waypoint x="662" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bkzi5h_di" bpmnElement="Flow_1bkzi5h">
+        <di:waypoint x="340" y="117" />
+        <di:waypoint x="410" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18jvhte_di" bpmnElement="Flow_18jvhte">
+        <di:waypoint x="510" y="117" />
+        <di:waypoint x="572" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02gk3hn_di" bpmnElement="Flow_02gk3hn">
+        <di:waypoint x="188" y="117" />
+        <di:waypoint x="240" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1kuma6w_di" bpmnElement="Activity_1kuma6w">
+        <dc:Bounds x="240" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1oojv9f_di" bpmnElement="Activity_1oojv9f">
+        <dc:Bounds x="410" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03cmrdm_di" bpmnElement="Event_03cmrdm">
+        <dc:Bounds x="152" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_08twoy1_di" bpmnElement="Event_08twoy1">
+        <dc:Bounds x="572" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_05vgsal_di" bpmnElement="Event_05vgsal">
+        <dc:Bounds x="662" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
