@@ -10,24 +10,14 @@
           <camunda:inputOutput>
             <camunda:inputParameter name="method">GET</camunda:inputParameter>
             <camunda:inputParameter name="url">https://reqres.in/api/users?page=2</camunda:inputParameter>
-            <camunda:outputParameter name="response">${response}</camunda:outputParameter>
+            <camunda:outputParameter name="getUserResponse">${response}</camunda:outputParameter>
           </camunda:inputOutput>
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
-        <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable("retryCount", execution.getVariable("retryCount") + 1);</camunda:script>
-        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_02gk3hn</bpmn:incoming>
       <bpmn:outgoing>Flow_1bkzi5h</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:intermediateCatchEvent id="Event_08twoy1">
-      <bpmn:incoming>Flow_18jvhte</bpmn:incoming>
-      <bpmn:outgoing>Flow_0mu6crh</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_12f7pce">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:intermediateCatchEvent>
     <bpmn:serviceTask id="Activity_1oojv9f" name="Rest API POST Call">
       <bpmn:extensionElements>
         <camunda:connector>
@@ -42,25 +32,24 @@
           </camunda:inputOutput>
           <camunda:connectorId>http-connector</camunda:connectorId>
         </camunda:connector>
-        <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable("userCreated", true);</camunda:script>
-        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1bkzi5h</bpmn:incoming>
       <bpmn:outgoing>Flow_18jvhte</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0mu6crh" sourceRef="Event_08twoy1" targetRef="Event_05vgsal" />
     <bpmn:sequenceFlow id="Flow_1bkzi5h" sourceRef="Activity_1kuma6w" targetRef="Activity_1oojv9f" />
     <bpmn:sequenceFlow id="Flow_18jvhte" sourceRef="Activity_1oojv9f" targetRef="Event_08twoy1" />
     <bpmn:startEvent id="Event_03cmrdm" camunda:asyncBefore="true" camunda:asyncAfter="true">
-      <bpmn:extensionElements>
-        <camunda:executionListener event="start">
-          <camunda:script scriptFormat="groovy">execution.setVariable("retryCount", 0);</camunda:script>
-        </camunda:executionListener>
-      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_02gk3hn</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_02gk3hn" sourceRef="Event_03cmrdm" targetRef="Activity_1kuma6w" />
+    <bpmn:intermediateCatchEvent id="Event_08twoy1">
+      <bpmn:incoming>Flow_18jvhte</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mu6crh</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_12f7pce">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT10M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0mu6crh" sourceRef="Event_08twoy1" targetRef="Event_05vgsal" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="connectorDemo1">

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_13umzcg" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+  <bpmn:process id="errorHandlingDemo2" isExecutable="true">
+    <bpmn:subProcess id="Activity_18eqar9">
+      <bpmn:incoming>Flow_1ehgo8f</bpmn:incoming>
+      <bpmn:outgoing>Flow_19hs5od</bpmn:outgoing>
+      <bpmn:userTask id="Activity_0y9px5d" name="Get Details for Voting">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="age" label="Voter Age" type="long" />
+          </camunda:formData>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_02j5l34</bpmn:incoming>
+        <bpmn:outgoing>Flow_0d8duq5</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:exclusiveGateway id="Gateway_0y8n7a0" default="Flow_14o8ct5">
+        <bpmn:incoming>Flow_0d8duq5</bpmn:incoming>
+        <bpmn:outgoing>Flow_14o8ct5</bpmn:outgoing>
+        <bpmn:outgoing>Flow_06twke6</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:userTask id="Activity_0lb9e0b" name="Get Other Details">
+        <bpmn:extensionElements>
+          <camunda:formData>
+            <camunda:formField id="areaCode" label="Area Code" type="string" />
+            <camunda:formField id="areaName" label="Area Name" type="string" />
+          </camunda:formData>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_14o8ct5</bpmn:incoming>
+        <bpmn:outgoing>Flow_1hcnhtm</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:sequenceFlow id="Flow_14o8ct5" sourceRef="Gateway_0y8n7a0" targetRef="Activity_0lb9e0b" />
+      <bpmn:sequenceFlow id="Flow_0d8duq5" sourceRef="Activity_0y9px5d" targetRef="Gateway_0y8n7a0" />
+      <bpmn:endEvent id="Event_1hdd631">
+        <bpmn:incoming>Flow_06twke6</bpmn:incoming>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_1kxukji" errorRef="Error_1jr99hr" />
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_06twke6" sourceRef="Gateway_0y8n7a0" targetRef="Event_1hdd631">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${age&lt;18}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:exclusiveGateway id="Gateway_05u0q2m" default="Flow_1jektcu">
+        <bpmn:incoming>Flow_1hcnhtm</bpmn:incoming>
+        <bpmn:outgoing>Flow_1jektcu</bpmn:outgoing>
+        <bpmn:outgoing>Flow_1458wq9</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:userTask id="Activity_0a2c6ne" name="Accept the casted Vote">
+        <bpmn:incoming>Flow_1jektcu</bpmn:incoming>
+        <bpmn:outgoing>Flow_0it6zk4</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="Event_1ngf88r">
+        <bpmn:incoming>Flow_1458wq9</bpmn:incoming>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_1tq2s5w" errorRef="Error_0j6fa06" />
+      </bpmn:endEvent>
+      <bpmn:intermediateCatchEvent id="Event_01xpqet">
+        <bpmn:incoming>Flow_0it6zk4</bpmn:incoming>
+        <bpmn:outgoing>Flow_13kg15o</bpmn:outgoing>
+        <bpmn:timerEventDefinition id="TimerEventDefinition_188gy6d">
+          <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5M</bpmn:timeDuration>
+        </bpmn:timerEventDefinition>
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_1hcnhtm" sourceRef="Activity_0lb9e0b" targetRef="Gateway_05u0q2m" />
+      <bpmn:sequenceFlow id="Flow_1jektcu" sourceRef="Gateway_05u0q2m" targetRef="Activity_0a2c6ne" />
+      <bpmn:sequenceFlow id="Flow_1458wq9" sourceRef="Gateway_05u0q2m" targetRef="Event_1ngf88r">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${areaCode!='A01' || areaName!='City Center'}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0it6zk4" sourceRef="Activity_0a2c6ne" targetRef="Event_01xpqet" />
+      <bpmn:startEvent id="Event_0r6pf7g">
+        <bpmn:outgoing>Flow_02j5l34</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_02j5l34" sourceRef="Event_0r6pf7g" targetRef="Activity_0y9px5d" />
+      <bpmn:endEvent id="Event_04biamy">
+        <bpmn:incoming>Flow_13kg15o</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_13kg15o" sourceRef="Event_01xpqet" targetRef="Event_04biamy" />
+    </bpmn:subProcess>
+    <bpmn:boundaryEvent id="Event_1f4884w" attachedToRef="Activity_18eqar9">
+      <bpmn:outgoing>Flow_0exceie</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1tzwptj" errorRef="Error_1jr99hr" camunda:errorCodeVariable="errorCode" camunda:errorMessageVariable="errorMessage" />
+    </bpmn:boundaryEvent>
+    <bpmn:userTask id="Activity_158mr4s" name="Record Invalid Voting Age">
+      <bpmn:incoming>Flow_0exceie</bpmn:incoming>
+      <bpmn:outgoing>Flow_05kgjrt</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0exceie" sourceRef="Event_1f4884w" targetRef="Activity_158mr4s" />
+    <bpmn:endEvent id="Event_1rm931n">
+      <bpmn:incoming>Flow_05kgjrt</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_05kgjrt" sourceRef="Activity_158mr4s" targetRef="Event_1rm931n" />
+    <bpmn:userTask id="Activity_14866hx" name="Any Error in Voting Process">
+      <bpmn:incoming>Flow_07xomrx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ve1ump</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_07xomrx" sourceRef="Event_0oufwj1" targetRef="Activity_14866hx" />
+    <bpmn:endEvent id="Event_19o9med">
+      <bpmn:incoming>Flow_0ve1ump</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0ve1ump" sourceRef="Activity_14866hx" targetRef="Event_19o9med" />
+    <bpmn:boundaryEvent id="Event_0oufwj1" attachedToRef="Activity_18eqar9">
+      <bpmn:outgoing>Flow_07xomrx</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0tgtu5v" camunda:errorCodeVariable="errorCode" camunda:errorMessageVariable="errorMessage" />
+    </bpmn:boundaryEvent>
+    <bpmn:startEvent id="Event_1tcdx38">
+      <bpmn:outgoing>Flow_1ehgo8f</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1ehgo8f" sourceRef="Event_1tcdx38" targetRef="Activity_18eqar9" />
+    <bpmn:endEvent id="Event_05yhpzy">
+      <bpmn:incoming>Flow_19hs5od</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_19hs5od" sourceRef="Activity_18eqar9" targetRef="Event_05yhpzy" />
+  </bpmn:process>
+  <bpmn:error id="Error_1jr99hr" name="under_age_voter" errorCode="V100" camunda:errorMessage="The Voter is under age." />
+  <bpmn:error id="Error_0j6fa06" name="invalid_details_${execution.getProcessInstanceId()}" errorCode="V101" camunda:errorMessage="Voter provided wrong voting details" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="errorHandlingDemo2">
+      <bpmndi:BPMNEdge id="Flow_0exceie_di" bpmnElement="Flow_0exceie">
+        <di:waypoint x="390" y="368" />
+        <di:waypoint x="390" y="430" />
+        <di:waypoint x="480" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05kgjrt_di" bpmnElement="Flow_05kgjrt">
+        <di:waypoint x="580" y="430" />
+        <di:waypoint x="632" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07xomrx_di" bpmnElement="Flow_07xomrx">
+        <di:waypoint x="790" y="368" />
+        <di:waypoint x="790" y="430" />
+        <di:waypoint x="880" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ve1ump_di" bpmnElement="Flow_0ve1ump">
+        <di:waypoint x="980" y="430" />
+        <di:waypoint x="1042" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ehgo8f_di" bpmnElement="Flow_1ehgo8f">
+        <di:waypoint x="198" y="180" />
+        <di:waypoint x="250" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19hs5od_di" bpmnElement="Flow_19hs5od">
+        <di:waypoint x="1300" y="215" />
+        <di:waypoint x="1332" y="215" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_158mr4s_di" bpmnElement="Activity_158mr4s">
+        <dc:Bounds x="480" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1rm931n_di" bpmnElement="Event_1rm931n">
+        <dc:Bounds x="632" y="412" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_14866hx_di" bpmnElement="Activity_14866hx">
+        <dc:Bounds x="880" y="390" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19o9med_di" bpmnElement="Event_19o9med">
+        <dc:Bounds x="1042" y="412" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1tcdx38_di" bpmnElement="Event_1tcdx38">
+        <dc:Bounds x="162" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_05yhpzy_di" bpmnElement="Event_05yhpzy">
+        <dc:Bounds x="1332" y="197" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18eqar9_di" bpmnElement="Activity_18eqar9" isExpanded="true">
+        <dc:Bounds x="250" y="80" width="1050" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_14o8ct5_di" bpmnElement="Flow_14o8ct5">
+        <di:waypoint x="605" y="180" />
+        <di:waypoint x="670" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0d8duq5_di" bpmnElement="Flow_0d8duq5">
+        <di:waypoint x="480" y="180" />
+        <di:waypoint x="555" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06twke6_di" bpmnElement="Flow_06twke6">
+        <di:waypoint x="580" y="205" />
+        <di:waypoint x="580" y="290" />
+        <di:waypoint x="712" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02j5l34_di" bpmnElement="Flow_02j5l34">
+        <di:waypoint x="326" y="180" />
+        <di:waypoint x="380" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hcnhtm_di" bpmnElement="Flow_1hcnhtm">
+        <di:waypoint x="770" y="180" />
+        <di:waypoint x="835" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jektcu_di" bpmnElement="Flow_1jektcu">
+        <di:waypoint x="885" y="180" />
+        <di:waypoint x="950" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1458wq9_di" bpmnElement="Flow_1458wq9">
+        <di:waypoint x="860" y="205" />
+        <di:waypoint x="860" y="290" />
+        <di:waypoint x="982" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0it6zk4_di" bpmnElement="Flow_0it6zk4">
+        <di:waypoint x="1050" y="180" />
+        <di:waypoint x="1102" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13kg15o_di" bpmnElement="Flow_13kg15o">
+        <di:waypoint x="1138" y="180" />
+        <di:waypoint x="1192" y="180" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0r6pf7g_di" bpmnElement="Event_0r6pf7g">
+        <dc:Bounds x="290" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1hdd631_di" bpmnElement="Event_1hdd631">
+        <dc:Bounds x="712" y="272" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_05u0q2m_di" bpmnElement="Gateway_05u0q2m" isMarkerVisible="true">
+        <dc:Bounds x="835" y="155" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_01xpqet_di" bpmnElement="Event_01xpqet">
+        <dc:Bounds x="1102" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0y9px5d_di" bpmnElement="Activity_0y9px5d">
+        <dc:Bounds x="380" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0y8n7a0_di" bpmnElement="Gateway_0y8n7a0" isMarkerVisible="true">
+        <dc:Bounds x="555" y="155" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lb9e0b_di" bpmnElement="Activity_0lb9e0b">
+        <dc:Bounds x="670" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0a2c6ne_di" bpmnElement="Activity_0a2c6ne">
+        <dc:Bounds x="950" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ngf88r_di" bpmnElement="Event_1ngf88r">
+        <dc:Bounds x="982" y="272" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_04biamy_di" bpmnElement="Event_04biamy">
+        <dc:Bounds x="1192" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_052a10m_di" bpmnElement="Event_1f4884w">
+        <dc:Bounds x="372" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1hg7706_di" bpmnElement="Event_0oufwj1">
+        <dc:Bounds x="772" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
