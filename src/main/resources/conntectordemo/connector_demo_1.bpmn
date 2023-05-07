@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0tz3dcv" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
-  <bpmn:process id="Process_0xlgl5g" isExecutable="true">
+  <bpmn:process id="Connector_demo_1" isExecutable="true">
     <bpmn:endEvent id="Event_05vgsal">
       <bpmn:incoming>Flow_0mu6crh</bpmn:incoming>
     </bpmn:endEvent>
@@ -63,7 +63,7 @@
     <bpmn:sequenceFlow id="Flow_02gk3hn" sourceRef="Event_03cmrdm" targetRef="Activity_1kuma6w" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0xlgl5g">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Connector_demo_1">
       <bpmndi:BPMNEdge id="Flow_0mu6crh_di" bpmnElement="Flow_0mu6crh">
         <di:waypoint x="608" y="117" />
         <di:waypoint x="662" y="117" />
