@@ -17,7 +17,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter:7.19.0'
+	implementation 'org.camunda.bpm:camunda-bom:7.19.0'
+	implementation 'org.camunda.bpm.springboot:camunda-bpm-spring-boot-starter-webapp:7.19.0'
+	implementation 'org.camunda.bpm:camunda-engine-plugin-connect:7.19.0'
 	implementation 'com.h2database:h2'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
