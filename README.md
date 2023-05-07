@@ -19,7 +19,9 @@ Log: not yet configured
 4. retrymechanism/retry_mechanism_demo_1.bpmn: This workflow shows the retry mechanism is simplistic process with just one service task configured to have 5 times execution with time interval of 5 minutes.
 
 
-# Below are some errors i received when i tried to create this project from scretch. I am keeping these is readme as the reader can too be benefited with the roadblock and their solution.
+# RoadBlock and Solutions
+
+Below are some errors i received when i tried to create this project from scretch. I am keeping these is readme as the reader can too be benefited with the roadblock and their solution.
 
 1. Just after I got a basic project from spring initializer. "org.springframework.boot does not exist" does not exist error:
 Solution: Just remove the iml files inside your modules
@@ -36,9 +38,7 @@ https://forum.camunda.io/t/camunda-spring-boot-starter-ignores-spring-datasource
 
 4. Had issue where using connector gave the issue 
 "* One of the attributes 'class', 'delegateExpression', 'type', or 'expression' is mandatory on serviceTask. If you are using a connector, make sure theconnect process engine plugin is registered with the process engine. | resource C:\Users\rishav.mishra\Downloads\demoCamunda\demoCamunda\build\resources\main\conntectordemo\connector_demo_1.bpmn | line 7 | column 70"
-Solution: I initially used camunda spring boot starter project. However, that is insufficient to work with Connectors. Also, its recommended to take 
-camunda BOM to use which will include everything in one shot.
-https://camunda.com/blog/2014/04/use-camunda-bom-for-maven-dependency/
+Solution: I initially used camunda spring boot starter project. However, that is insufficient to work with Connectors. We need to have the connector plugin or relevant dependency. I kept 'org.camunda.bpm:camunda-engine-plugin-connect:7.19.0' as dependency.
 
 
 
