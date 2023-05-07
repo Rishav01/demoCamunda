@@ -1,10 +1,10 @@
 # Demo Camunda Feature
 
-# Below are this project configuration details:
-camunda version: 7.19
-Java version: 11
-Spring version: 2.7.12
-Database: h2 file based
+* Below are this project configuration details:
+camunda version: 7.19,
+Java version: 11,
+Spring version: 2.7.12,
+Database: h2 file based,
 Log: not yet configured
 
 
