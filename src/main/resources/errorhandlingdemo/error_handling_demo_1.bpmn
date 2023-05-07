@@ -31,7 +31,7 @@
     <bpmn:subProcess id="Activity_00pwkzf" triggeredByEvent="true">
       <bpmn:startEvent id="Event_0zxjktj">
         <bpmn:outgoing>Flow_0awx38q</bpmn:outgoing>
-        <bpmn:errorEventDefinition id="ErrorEventDefinition_0v35gvj" errorRef="Error_03z3312" />
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_0v35gvj" errorRef="Error_03z3312" camunda:errorCodeVariable="errorCode" camunda:errorMessageVariable="errorMessage" />
       </bpmn:startEvent>
       <bpmn:sequenceFlow id="Flow_0awx38q" sourceRef="Event_0zxjktj" targetRef="Activity_00zmoqb" />
       <bpmn:endEvent id="Event_1k9m8cv">
@@ -79,7 +79,7 @@
       <bpmn:sequenceFlow id="Flow_0h04mia" sourceRef="Activity_1ursf16" targetRef="Event_1fy85ca" />
       <bpmn:startEvent id="Event_0zmgsi7">
         <bpmn:outgoing>Flow_1lz4ybm</bpmn:outgoing>
-        <bpmn:errorEventDefinition id="ErrorEventDefinition_0bwpooj" />
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_0bwpooj" camunda:errorCodeVariable="errorCode" camunda:errorMessageVariable="errorMessage" />
       </bpmn:startEvent>
       <bpmn:userTask id="Activity_1ursf16" name="Any Error in Voting Process">
         <bpmn:incoming>Flow_1lz4ybm</bpmn:incoming>
@@ -209,6 +209,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1ekz1if_di" bpmnElement="Event_0zmgsi7">
         <dc:Bounds x="720" y="372" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="734" y="415" width="9" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0mgpjya_di" bpmnElement="Activity_1ursf16">
         <dc:Bounds x="810" y="350" width="100" height="80" />
